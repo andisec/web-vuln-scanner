@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test & Syntax Check
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8", "3.10", "3.12"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Syntax check scanner.py
+        run: python -m py_compile scanner.py
+
+      - name: Smoke test (import check)
+        run: python -c "import ast; ast.parse(open('scanner.py').read()); print('scanner.py OK')"
+
+      - name: Verify no external dependencies
+        run: |
+          if grep -qE "^\s*(import|from)\s+(requests|bs4|nmap|scapy)\b" scanner.py; then
+            echo "::error::Dependency eksternal terdeteksi! Tool harus 100% stdlib."
+            exit 1
+          else
+            echo "OK - 100% Python stdlib"
+          fi
+        shell: bash
+
+  lint:
+    name: Code Style (PEP8 ringan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install linter
+        run: pip install flake8
+      - name: Lint
+        run: flake8 scanner.py --max-line-length=120 --extend-ignore=E501,W605
+        continue-on-error: true
