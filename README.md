@@ -232,57 +232,6 @@ Setiap temuan punya **severity**: `CRITICAL` → `HIGH` → `MEDIUM` → `LOW` �
 
 ---
 
-## ☁️ Deploy ke GitHub
-
-### Langkah 1 — Siapkan file & repo
-
-```bash
-mkdir web-vuln-scanner && cd web-vuln-scanner
-cp /path/ke/scanner.py .
-```
-
-Buka GitHub → **New repository** → nama: `web-vuln-scanner` → Public → **Create**.
-
-### Langkah 2 — Push ke GitHub
-
-```bash
-git init
-git add scanner.py README.md LICENSE
-git commit -m "feat: initial release - web vulnerability scanner"
-git branch -M main
-git remote add origin https://github.com/username/web-vuln-scanner.git
-git push -u origin main
-```
-
-### Langkah 3 (Opsional) — GitHub Actions CI
-
-Buat file `.github/workflows/ci.yml` agar script selalu teruji setiap push:
-
-```yaml
-name: CI
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Syntax check
-        run: python3 -m py_compile scanner.py
-```
-
-### Langkah 4 (Opsional) — GitHub Release
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-Lalu di GitHub: **Releases → Draft a new release** → pilih tag `v1.0.0` → isi changelog → **Publish**. Pengguna bisa download versi stabil via ZIP.
-
----
 
 ## 🤝 Kontribusi
 
