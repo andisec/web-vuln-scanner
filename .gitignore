@@ -1,0 +1,45 @@
+# Laporan hasil scan (jangan bocorkan hasil scan ke publik!)
+reports/
+*.html
+!README.md
+
+# File sensitif hasil pentest
+*.log
+*.json
+!package.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Output & temporary
+output/
+tmp/
+temp/
+*.tmp
